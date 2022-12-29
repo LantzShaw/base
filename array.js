@@ -107,3 +107,9 @@ console.log('--------------sum--------------', sum)
 //   }
 //   return acc
 // }, {})
+
+const list = [1, 3, 8, 0, 10]
+
+list.map((_, index) => {
+  console.log('index', index)
+})
