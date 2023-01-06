@@ -81,3 +81,15 @@ set.size
 // 数组去重
 const arr = [2, 3, 4, 5, 6, 7, 8, 9, 1, 2]
 const tempArr = [...new Set(arr)]
+
+for (const item of set.keys()) {
+  console.log(item)
+}
+
+for (const item of set.values()) {
+  console.log(item)
+}
+
+for (const [key, value] of set.entries()) {
+  console.log(key, value)
+}
