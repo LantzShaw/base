@@ -56,7 +56,7 @@ function formatNum(n) {
     return
   }
 
-  return Number(n).toLocaleString().split(',').join('_')
+  return n.toLocaleString().split(',').join('_')
 }
 
 console.log(formatNum(731928392)) // -> 731_928_392
