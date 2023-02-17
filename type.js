@@ -2,15 +2,27 @@
 console.log(null == undefined)
 // -> false
 console.log(null === undefined)
-
 // -> false
-// const bool = Boolean(null)
+console.log(NaN === NaN)
 // -> false
-// const bool = Boolean(undefined)
-
+console.log(NaN == NaN)
+// -> false
+console.log(Boolean(NaN))
+// -> false
+console.log(Boolean(null))
+// -> false
+console.log(Boolean(undefined))
+// -> false
+console.log(Boolean(''))
+// -> false
+console.log(Boolean(0))
 // -> true
-// const bool = 0 == false
+console.log(0 == false)
 // -> false
-// const bool = 0 === false
+console.log(0 === false)
 
-// console.log(bool)
+const foo = ''
+
+if (foo) {
+  console.log('enpty')
+}

@@ -20,7 +20,8 @@ type Foo = 'add' | number | string | never
 // NOTE: pick 从类型对象中 挑选几个类型 组成一个新的类型
 type NewPerson = Pick<Person, 'name' | 'gender'>
 
-// Exclude 删除类型集合中的指定类型 联合类型
+// NOTE: 联合类型与联合类型比较 好像会自动遍历
+// Exclude 删除类型集合中的指定类型 联合类型 -> 返回一个联合类型
 type Doctor = Exclude<keyof Person, 'name' | 'a' | 3 | never | 'age'>
 
 /**
@@ -31,7 +32,7 @@ type Doctor = Exclude<keyof Person, 'name' | 'a' | 3 | never | 'age'>
  * 如果extends前面的类型能够赋值给extends后面的类型，那么表达式判断为真，否则为假。
  */
 // NOTE: Exclude 实现
-// 满足T的接口一定可以满足U，所以条件为真
+// 满足T的接口一定可以满足U，所以条件为真   T 和 U 都要是联合类型
 // TODO: 这个地方不太好理解
 type TempExclude<T, U> = T extends U ? never : T
 
