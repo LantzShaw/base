@@ -20,6 +20,8 @@ type Foo = 'add' | number | string | never
 // NOTE: pick 从类型对象中 挑选几个类型 组成一个新的类型
 type NewPerson = Pick<Person, 'name' | 'gender'>
 
+type TempPick<T, K extends keyof T> = { [S in K]: T[S] }
+
 // NOTE: 联合类型与联合类型比较 好像会自动遍历
 // Exclude 删除类型集合中的指定类型 联合类型 -> 返回一个联合类型
 type Doctor = Exclude<keyof Person, 'name' | 'a' | 3 | never | 'age'>
@@ -42,7 +44,7 @@ type TempExclude<T, U> = T extends U ? never : T
 type doctor = Omit<Person, 'name' | 'gender'>
 
 // NOTE: Omit 实现
-type TempOmit<T, k extends keyof any> = Pick<T, Exclude<keyof T, k>>
+type TempOmit<T, k extends keyof T> = Pick<T, Exclude<keyof T, k>>
 
 // Partial 可以快速把某个接口类型中定义的属性变成可选的(Optional)
 type Chinese = Partial<Person>

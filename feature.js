@@ -29,11 +29,11 @@ function* boo() {
 
 const booIterator = boo()
 
-console.log(booIterator.next())
+// console.log(booIterator.next())
 
 function* baz() {
+  yield* boo() // 不加 * 返回的是 Generator 调用另一个函数时会加 *
   yield 3
-  yield* boo()
 }
 
 const bazIterator = baz()
