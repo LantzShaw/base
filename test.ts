@@ -10,6 +10,43 @@ type Person = {
   // [propname: string]: string // 字符串索引签名
 }
 
+// 这个是交叉类型
+// 这个 Record 是一个内置的高级类型，作用是根据传入的 key 和 value 的类型生成索引类型
+type TestPerson = {
+  name: string
+  age: string
+} & Record<string, any>
+
+// 这种生成索引类型的语法叫做映射类型 是一个有可索引签名的索引类型
+// K extends string | number | symbol 表示只能是其中的一种 设置为其它类型将会报错
+type TempRecord<K extends string | number | symbol, T> = { [P in K]: T }
+
+// 但是任意层数的索引类型，怎么给每一层都加上Record<string, any>呢？
+// 这个时候 我们就要去递归了
+
+type DeepRecord<Obj extends Record<string, any>> = {
+  [Key in keyof Obj]: Obj[Key] extends Record<string, any>
+    ? DeepRecord<Obj[Key]> & Record<string, any>
+    : Obj[Key]
+} & Record<string, any>
+
+type Data = {
+  aaa?: number
+  bbb: {
+    ccc: number
+    ddd: string
+  }
+  eee: {
+    ccc: {
+      fff: number
+    }
+  }
+}
+
+// 参考文章: https://juejin.cn/post/7181846488937398309
+// NOTE: 递归后的效果
+type TempData = DeepRecord<Data>
+
 // 不会显示 never类型
 type Foo = 'add' | number | string | never
 
@@ -19,7 +56,7 @@ type Foo = 'add' | number | string | never
 
 // NOTE: pick 从类型对象中 挑选几个类型 组成一个新的类型
 type NewPerson = Pick<Person, 'name' | 'gender'>
-
+// 也可以 K extends keyof any
 type TempPick<T, K extends keyof T> = { [S in K]: T[S] }
 
 // NOTE: 联合类型与联合类型比较 好像会自动遍历
