@@ -26,3 +26,9 @@ const foo = ''
 if (foo) {
   console.log('enpty')
 }
+
+const baz = 0
+
+if (baz) {
+  console.log('')
+}

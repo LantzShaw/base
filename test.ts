@@ -8,6 +8,7 @@ type Person = {
   gender: string
   age: number
   // [propname: string]: string // 字符串索引签名
+  // [propname: string]: any // 字符串索引签名
 }
 
 // 这个是交叉类型
