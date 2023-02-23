@@ -148,3 +148,29 @@ type T3 = T1 | T2
 // 这里 T0、T1 分别具有数字索引签名和字符串索引签名，因此结果类型不具有索引签名，使用索引访问结果类型属性时会报错。
 // T3[0]
 // T3['a']
+
+// NOTE: .d.ts中使用as const 会报错 e.g.
+// export const buttonType = [
+//   'primary',
+//   'success',
+//   'info',
+//   'warning',
+//   'danger',
+//   'text'
+// ] as const;
+// redux action 中使用
+// const ReturnType
+const setCount = (n: number) => {
+  return <const>{
+    type: 'SET_COUNT',
+    payload: n,
+  }
+}
+
+const resetCount = () => {
+  return <const>{
+    type: 'RESET_COUNT',
+  }
+}
+
+type CountActions = ReturnType<typeof setCount> | ReturnType<typeof resetCount>
