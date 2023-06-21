@@ -4,21 +4,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>文件上传 - 断点续传</title>
+    <title>文件上传 - FileReader上传</title>
 </head>
 
 <body>
-    <input type="file">
-    <button onclick="onUpload()">上传</button>
+    <input type="file" id="fileInput" accept=".jpg,.png">
+    <button id="uploadButton" onclick="onUpload()">上传文件</button>
 </body>
 
 <script>
+    const fileInput = document.getElementById('fileInput')
 
     function onUpload() {
-        console.log('upload')
+        const file = fileInput.files[0]
+
+        if (file) {
+            const reader = new FileReader();
+
+            //  reader.readAsArrayBuffer reader.readAsDataURL reader.readAsBinaryString reader.readAsText
+            reader.readAsArrayBuffer(file)
+
+            reader.onload = (event) => {
+                const fileContent = event.target.result
+
+                fetch('http://localhost:3000/upload', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        file: fileContent
+                    })
+                }).then(res => res.json()).then(data => {
+                    if (res.ok) {
+                        console.log('文件上传成功!')
+                    } else {
+                        console.log('文件上传失败')
+                    }
+                }).catch(err => {
+                    console.err(err)
+                })
+            }
+        }
     }
-
-
 </script>
 
 </html>
