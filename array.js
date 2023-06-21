@@ -113,3 +113,20 @@ const list = [1, 3, 8, 0, 10]
 list.map((_, index) => {
   console.log('index', index)
 })
+
+// NOTE: 数组求最大最小值
+// 最小值
+Math.min(...list)
+// 最大值
+Math.max(...list)
+// 结果
+console.log(Math.min(...list)) // 1
+console.log(Math.max(...list)) // 9
+
+// for of 获取数组下标
+
+const arrList = ['a', 'b', 'c']
+
+for (let [index, item] of arrList.entries()) {
+  console.log(index, item)
+}
