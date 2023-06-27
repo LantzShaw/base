@@ -130,3 +130,13 @@ const arrList = ['a', 'b', 'c']
 for (let [index, item] of arrList.entries()) {
   console.log(index, item)
 }
+
+// NOTE: 去重函数
+function unique(array) {
+  const map = new Map()
+  return array.filter(item => !map.has(item) && map.set(item, 1))
+}
+
+const fruits = ['apple', 'orange', 'apple', 'orange']
+
+console.log(unique(fruits))
