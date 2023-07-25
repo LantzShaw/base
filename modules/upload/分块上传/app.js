@@ -31,7 +31,12 @@ app.post('/upload', upload.single('file'), (req, res) => {
 
   chunkStream.on('end', () => {
     fs.unlinkSync(file.path) // 读取文件块的流结束后,删除临时文件
-    res.send(200) // 响应上传成功的状态
+
+    const progress = ((currentChunk + 1) / totalChunks) * 100
+
+    res.json({
+      progress,
+    })
   })
 })
 
