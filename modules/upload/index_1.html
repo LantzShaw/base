@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文件上传 - 表单单文件上传</title>
+</head>
+
+<body>
+    <form action="http://localhost:3000/upload" method="post" enctype="multipart/form-data">
+        <input id="filesInput" type="file" name="files" multiple accept=".jpg,.png">
+        <button type="submit">上传文件</button>
+    </form>
+</body>
+
+<script>
+    const filesInput = document.getElementById("filesInput")
+
+    filesInput.addEventListener('change', () => {
+        if (filesInput.files.lenght > 3) {
+            alert('最多只能上传三张图片')
+            filesInput.value = ''
+        }
+    })
+</script>
+
+</html>

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>文件上传 - websocket上传</title>
+    <title>文件上传 - FileReader上传</title>
 </head>
 
 <body>
@@ -19,26 +19,20 @@
         const file = fileInput.files[0]
 
         if (file) {
-            // 使用FileReader在没有表单的情况下实现文件上传
             const reader = new FileReader();
 
             //  reader.readAsArrayBuffer reader.readAsDataURL reader.readAsBinaryString reader.readAsText
-            reader.readAsArrayBuffer(file)
+            reader.readAsArrayBuffer(file) // 二进制数据 二进制缓冲区的对象 
 
             reader.onload = (event) => {
                 const fileContent = event.target.result
 
-                console.log(fileContent)
-
-                const formData = new FormData()
-                formData.append('file', fileContent)
-
                 fetch('http://localhost:3000/upload', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'multipart/form-data'
+                        'Content-Type': 'application/octet-stream'
                     },
-                    body: formData
+                    body: fileContent
                 }).then(res => res.json()).then(data => {
                     if (res.ok) {
                         console.log('文件上传成功!')
