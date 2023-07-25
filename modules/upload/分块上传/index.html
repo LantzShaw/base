@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>分块(即分片)上传</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/1.3.6/axios.js"></script>
+</head>
+
+<body>
+    <input type="file" id="fileInput">
+    <button onclick="upload()">上传文件</button>
+    <script>
+        // NOTE: 分块上传优势: 较少内存占用,实现断点续传,并发处理,利用带宽,提高效率
+        // 不足支处: 增加复杂性,增加额外计算存储
+        // 应用场景: 云存储大文件上传/多媒体视频音频上传/需断点续传的应用
+
+        async function upload() {
+            const fileInput = document.getElementById("fileInput");
+            const file = fileInput.files[0]
+
+            const chunkSize = 1 * 1024 * 1024 // 定义每块大小为 1MB
+            const totalChunks = Math.ceil(file.size / chunkSize) // 计算总块数
+
+            let currentChunk = 0
+
+            while (currentChunk < totalChunks) {
+                const start = currentChunk * chunkSize
+                const end = Math.min(currentChunk + chunkSize, file.size) // 计算当前块的结束位置
+
+                const chunk = file.slice(start, end) // 切割文件为当前块
+
+                const formData = new FormData()
+
+                formData.append('file', chunk)
+                formData.append('fileName', file.name)
+                formData.append('totalChunk', totalChunks)
+                formData.append('currentChunk', currentChunk)
+
+                try {
+                    await axios.post('http://localhost:3000/upload', formData, {
+                        headers: {
+                            'content-type': 'multipart/form-data'
+                        }
+                    })
+                } catch (error) {
+                    console.log(error)
+                    return
+                }
+
+                currentChunk++
+            }
+
+            try {
+                const postData = { fileName: file.name, totalChunks } // 构造合并请求的数据
+
+                await axios.post('http://localhost:3000/merge', postData, {
+                    headers: {
+                        'content-type': 'application/json'
+                    }
+                }) // 发送合并请求
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    </script>
+</body>
+
+</html>

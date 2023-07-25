@@ -4,14 +4,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>base64编码文件上传</title>
+    <title>base64编码文件上传 - 支持文本文件/zip文件上传</title>
 </head>
 
 <body>
     <input type="file" multiple>
-    <button>文件上传</button>
+    <button id="uploadButton">文件上传</button>
     <script>
         const fileInput = document.getElementById("fileInput");
+        const uploadButton = document.getElementById("uploadButton");
+
+        uploadButton.addEventListener('click', () => {
+            const files = fileInput.files
+
+            const fileContents = []
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i]
+                const reader = new FileReader()
+
+                reader.readAsBinaryString(file)
+                reader.onload = event => {
+                    const fileContent = event.target.result
+                    const base64Content = btoa(fileContent)
+
+                    const fileExtension = file.name.split('.').pop()
+
+                    fileContents.push(
+                        {
+                            content: base64Content,
+                            extension: fileExtension
+                        }
+                    )
+
+                    if (fileContents.length === files.length) {
+                        sendRequest()
+                    }
+                }
+            }
+
+            function sendRequest() {
+                fetch('http:localhost:3000/upload', {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        files: fileContents
+                    }).then(res => {
+                        if (res.ok) {
+                            console.log('upload successful')
+                        } else {
+                            console.log('上传失败')
+                        }
+                    }).catch(err => {
+                        console.log(err)
+                    })
+                })
+            }
+        })
+
     </script>
 </body>
 
