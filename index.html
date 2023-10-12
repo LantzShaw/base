@@ -10,6 +10,28 @@
 
 <body>
 
+    <script>
+        function test(callback) {
+            console.log('-----parent-----', this)
+
+            const obj = {
+
+            }
+
+            return function () {
+                // callback(1, 2, 3)
+                callback.call(this, ...arguments)
+                console.log('-----闭包-------', this, arguments)
+            }
+        }
+
+        test(function () {
+            console.log('-----callback-----', this)
+
+            console.log(arguments)
+
+        })(1, 2, 3);
+    </script>
 </body>
 
 </html>
