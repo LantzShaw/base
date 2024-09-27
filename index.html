@@ -9,8 +9,21 @@
 </head>
 
 <body>
+    <button id="button">打印</button>
 
     <script>
+          const buttonElement =  document.querySelector('#button')
+    console.log('buttonElement', buttonElement)
+
+
+    buttonElement.addEventListener('click', () => {
+        // printWindow.document.write('<html><head><title>Print</title></head><body>');
+        //  printWindow.document.write(content);
+        //  printWindow.document.write('</body></html>');
+        //  printWindow.document.close();
+         printWindow.print();
+    })
+
         function test(callback) {
             console.log('-----parent-----', this)
 
