@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Table Example</title>
+</head>
+
+<body>
+    <div style="position: relative;">
+        <canvas id="tableCanvas" width="800" height="2000" style="border: 1px solid black;; overflow-y: auto;"></canvas>
+    </div>
+    <script>
+        const canvas = document.getElementById("tableCanvas");
+        const ctx = canvas.getContext("2d");
+
+        // 表格设置
+        const rows = 100000; // 行数
+        const cols = 5; // 列数
+        const cellWidth = 150; // 每个单元格的宽度
+        const cellHeight = 50; // 每个单元格的高度
+
+        let isSelecting = false;
+        let startX, startY, endX, endY;
+
+        canvas.addEventListener('mousedown', function (e) {
+            isSelecting = true;
+            startX = e.offsetX;
+            startY = e.offsetY;
+        });
+
+        canvas.addEventListener('mousemove', function (e) {
+            if (isSelecting) {
+                endX = e.offsetX;
+                endY = e.offsetY;
+                drawSelectionBox();
+            }
+        });
+
+        canvas.addEventListener('mouseup', function (e) {
+            isSelecting = false;
+            // 你可以在这里执行进一步的操作，例如复制选中的文本
+        });
+
+        function drawSelectionBox() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);  // 清空之前的绘制
+            ctx.strokeStyle = 'blue';
+            ctx.strokeRect(startX, startY, endX - startX, endY - startY);  // 绘制选择框
+        }
+
+        // 绘制表格
+        function drawTable() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // 清除画布
+            ctx.strokeStyle = "black";
+            ctx.lineWidth = 1;
+
+            // 画横线
+            for (let i = 0; i <= rows; i++) {
+                let y = i * cellHeight;
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(cols * cellWidth, y);
+                ctx.stroke();
+            }
+
+            // 画竖线
+            for (let j = 0; j <= cols; j++) {
+                let x = j * cellWidth;
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, rows * cellHeight);
+                ctx.stroke();
+            }
+
+            // 在单元格中添加文字
+            ctx.font = "16px Arial";
+            ctx.fillStyle = "black";
+            for (let i = 0; i < rows; i++) {
+                for (let j = 0; j < cols; j++) {
+                    let text = `(${i + 1}, ${j + 1})`;
+                    let textX = j * cellWidth + 10; // 添加一些偏移以避免文字靠边
+                    let textY = i * cellHeight + 30;
+                    ctx.fillText(text, textX, textY);
+                }
+            }
+        }
+
+        drawTable();
+    </script>
+</body>
+
+</html>
